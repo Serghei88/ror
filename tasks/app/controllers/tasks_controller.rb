@@ -4,14 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    tasks = $redis.get('tasks')
-
-    if tasks.nil?
-      tasks = Task.all.to_json
-      $redis.set('tasks', tasks)
-      $redis.expire('tasks', 2.minute.to_i)
-    end
-    @tasks = JSON.load tasks
+    @tasks = repo.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -22,7 +15,7 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
-    @task = Task.find(params[:id])
+    @task = repo.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -33,7 +26,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   # GET /tasks/new.json
   def new
-    @task = Task.new
+    @task = repo.new_entity
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,16 +36,16 @@ class TasksController < ApplicationController
 
   # GET /tasks/1/edit
   def edit
-    @task = Task.find(params[:id])
+    @task = repo.find(params[:id])
   end
 
   # POST /tasks
   # POST /tasks.json
   def create
-    @task = Task.new(params[:task])
+    @task = repo.new_entity(params[:task])
 
     respond_to do |format|
-      if @task.save
+      if repo.save(@task)
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
         format.json { render json: @task, status: :created, location: @task }
       else
@@ -65,10 +58,10 @@ class TasksController < ApplicationController
   # PUT /tasks/1
   # PUT /tasks/1.json
   def update
-    @task = Task.find(params[:id])
+    @task = repo.find(params[:id])
 
     respond_to do |format|
-      if @task.update_attributes(params[:task])
+      if repo.update_attributes(@task,params[:task])
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
         format.json { head :no_content }
       else
@@ -81,12 +74,18 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
-    @task = Task.find(params[:id])
-    @task.destroy
+    @task = repo.find(params[:id])
+    repo.delete(@task)
 
     respond_to do |format|
       format.html { redirect_to tasks_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+
+  def repo
+    @repo ||= TasksRepository.new
   end
 end
