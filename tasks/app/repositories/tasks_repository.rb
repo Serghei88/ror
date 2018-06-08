@@ -23,13 +23,20 @@ class TasksRepository
 
   def update_attributes(task,attrs)
     task.update_attributes(attrs)
+    clear_cache
   end
 
   def save(task)
     task.save
+    clear_cache
   end
 
   def delete(task)
     task.destroy
+    clear_cache
+  end
+
+  def clear_cache
+    $redis.del "tasks"
   end
 end
