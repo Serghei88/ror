@@ -3,16 +3,17 @@
 class CommentsController < ApplicationController
   http_basic_authenticate_with name: 'dhh', password: 'secret', only: :destroy
   def create
-    @article = Article.find(params[:article_id])
-    @comment = @article.comments.create(comment_params)
-
+    @article = articles_repo.find(params[:article_id])
+    @comment = comments_repo.new_entity(comment_params)
+    @comment.article_id = @article.id
+    comments_repo.save(@comment)
     redirect_to article_path(@article)
   end
 
   def destroy
-    @article = Article.find(params[:article_id])
+    @article = articles_repo.find(params[:article_id])
     @comment = @article.comments.find(params[:id])
-    @comment.destroy
+    comments_repo.delete(@comment)
     redirect_to article_path(@article)
     end
 
@@ -20,5 +21,13 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body, :commenter)
+  end
+
+  def comments_repo
+    @comments_repo ||= CommentsRepository.new
+  end
+
+  def articles_repo
+    @articles_repo ||= ArticlesRepository.new
   end
 end
