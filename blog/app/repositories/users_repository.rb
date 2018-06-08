@@ -2,16 +2,8 @@
 
 class UsersRepository
   def all
-    users = $redis.get('users')
-
-    if users.nil?
-      users = User.all.to_json
-      $redis.set('users', users)
-      $redis.expire('users', 2.minute.to_i)
-    end
-    @users = JSON.parse(users, object_class: User)
-    @users
-    end
+    User.all
+  end
 
   def find(id)
     User.find(id)

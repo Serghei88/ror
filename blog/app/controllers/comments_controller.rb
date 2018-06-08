@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  http_basic_authenticate_with name: 'dhh', password: 'secret', only: :destroy
+  
   def create
+    authenticate_user!
     @article = articles_repo.find(params[:article_id])
     @comment = comments_repo.new_entity(comment_params)
     @comment.article_id = @article.id
@@ -11,6 +12,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    authenticate_user!
     @article = articles_repo.find(params[:article_id])
     @comment = @article.comments.find(params[:id])
     comments_repo.delete(@comment)

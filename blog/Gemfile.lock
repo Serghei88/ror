@@ -29,6 +29,7 @@ GEM
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     arel (3.0.3)
+    bcrypt (3.1.12)
     builder (3.0.4)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -38,6 +39,13 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    devise (3.5.10)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.23)
@@ -55,6 +63,7 @@ GEM
     mime-types (1.25.1)
     multi_json (1.13.1)
     mysql2 (0.3.21)
+    orm_adapter (0.5.0)
     polyglot (0.3.5)
     power_assert (1.1.1)
     rack (1.4.7)
@@ -107,6 +116,8 @@ GEM
       redis-store (~> 1.1.4)
     redis-store (1.1.7)
       redis (>= 2.2)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
     sass (3.5.6)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -129,6 +140,7 @@ GEM
     test-unit (3.2.8)
       power_assert
     thor (0.20.0)
+    thread_safe (0.3.6)
     tilt (1.4.1)
     treetop (1.4.15)
       polyglot
@@ -136,12 +148,15 @@ GEM
     tzinfo (0.3.54)
     uglifier (4.1.10)
       execjs (>= 0.3.0, < 3)
+    warden (1.2.7)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
+  devise
   jquery-rails
   mysql2 (= 0.3.21)
   rails (= 3.2.22.5)
