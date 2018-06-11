@@ -2,5 +2,12 @@
 
 <%= render 'form' %>
 
+<h2> Comments</h2>
+
+<%= render @article.comments %>
+
+<h2> Add new comment:</h2>
+<%= render 'comments/form' %>
+
 <%= link_to 'Show', @article %> |
 <%= link_to 'Back', articles_path %>
