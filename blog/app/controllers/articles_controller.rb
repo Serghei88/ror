@@ -74,8 +74,7 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
-    @article = repo.find(params[:id])
-    repo.delete(@article)
+    repo.delete(params[:id])
 
     respond_to do |format|
       format.html { redirect_to articles_url }

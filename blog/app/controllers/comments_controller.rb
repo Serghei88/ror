@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  
   def create
-    authenticate_user!
+    
     @article = articles_repo.find(params[:article_id])
-    @comment = comments_repo.new_entity(comment_params)
-    @comment.article_id = @article.id
-    comments_repo.save(@comment)
+    @comment = articles_repo.new_comment_entity(comment_params)
+    @article.comments << @comment
+    articles_repo.save(@article)
     redirect_to article_path(@article)
   end
 
@@ -15,18 +14,15 @@ class CommentsController < ApplicationController
     authenticate_user!
     @article = articles_repo.find(params[:article_id])
     @comment = @article.comments.find(params[:id])
-    comments_repo.delete(@comment)
+    @article.comments.delete @comment
+    articles_repo.save(@article)
     redirect_to article_path(@article)
-    end
+  end
 
   private
 
   def comment_params
     params.require(:comment).permit(:body, :commenter)
-  end
-
-  def comments_repo
-    @comments_repo ||= CommentsRepository.new
   end
 
   def articles_repo

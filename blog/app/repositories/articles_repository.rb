@@ -21,6 +21,10 @@ class ArticlesRepository
     Article.new(attrs)
   end
 
+  def new_comment_entity(attrs = nil)
+    comment = Comment.new(attrs)
+  end
+
   def update_attributes(article, attrs)
     article.update_attributes(attrs)
     clear_cache
@@ -31,7 +35,8 @@ class ArticlesRepository
     clear_cache
   end
 
-  def delete(article)
+  def delete(id)
+    article = Article.find(id)
     article.destroy
     clear_cache
   end
